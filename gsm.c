@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+GtkWidget *zveno_add;
 GtkWidget *vbox;
 int n;
 
@@ -20,11 +21,9 @@ static void callback( GtkWidget *widget,
                       gpointer   data )
 {
 
-	GtkWidget *zveno_add;
 	GtkWidget *zv;
 	printf ("SIGNAL\n");
 
-//	gtk_widget_hide( zveno_add  );
 	zv = make_zveno(n);
 	gtk_box_pack_start (GTK_BOX (vbox), zv, FALSE, FALSE,0);
 	gtk_widget_show_all( vbox );
@@ -42,7 +41,6 @@ static GtkWidget *make_zveno(int n2)
 	GtkWidget *hbox2;
 	GtkWidget *entry;
 	GtkWidget *combo;
-	GtkWidget *zveno_add;
 	GtkWidget *aspectframe;
 	GtkWidget *label;
 
@@ -84,13 +82,6 @@ static GtkWidget *make_zveno(int n2)
     /* can free glist now, combo takes a copy */
 
         gtk_box_pack_start (GTK_BOX (vbox2), combo, TRUE, FALSE, 0);
-
-	zveno_add = gtk_button_new_with_label("Добавить звено");
-
-	g_signal_connect (GTK_OBJECT(zveno_add), "clicked",
-			      G_CALLBACK (callback), NULL);
-
-        gtk_box_pack_start (GTK_BOX (vbox2), zveno_add, TRUE, FALSE, 0);
 
 
 	vbox4 = gtk_vbox_new (FALSE, 0);
@@ -138,44 +129,63 @@ static GtkWidget *make_zveno(int n2)
 int main( int   argc,
           char *argv[] )
 {
- 
 
-  GtkWidget *main_vbox;
-  GtkWidget *window;
-  GtkWidget *zveno;
-  GtkWidget *frame;
+	GtkWidget *main_vbox;
+	GtkWidget *window;
+	GtkWidget *zveno;
+	GtkWidget *frame;
+	GtkWidget *scrolled;
+	GtkWidget *hbox;
 
 	n   = 0;
-  gtk_init (&argc, &argv);
+	gtk_init (&argc, &argv);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), "GUI_RLN");
+	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title (GTK_WINDOW (window), "GUI_RLN");
 
-  g_signal_connect (window, "delete-event",
+	g_signal_connect (window, "delete-event",
 		    G_CALLBACK (delete_event), NULL);
 
+	main_vbox = gtk_vbox_new (FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (window), main_vbox);
+
+	hbox = gtk_hbox_new (FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
 
 
-  main_vbox = gtk_vbox_new (FALSE, 5);
-  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 10);
-  gtk_container_add (GTK_CONTAINER (window), main_vbox);
+	zveno_add = gtk_button_new_with_label("Добавить звено");
 
-  vbox = gtk_vbox_new (FALSE, 0);
+	g_signal_connect (GTK_OBJECT(zveno_add), "clicked",
+			      G_CALLBACK (callback), NULL);
 
-  gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE,0);
-
-
-  n++;
-  zveno = make_zveno(n);
-  gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
-
-
+        gtk_box_pack_start (GTK_BOX (hbox), zveno_add, FALSE, FALSE, 0);
 
 
 
-  gtk_widget_show_all  (window);
+	scrolled = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(
+		GTK_SCROLLED_WINDOW(scrolled),
+		GTK_POLICY_AUTOMATIC,
+		GTK_POLICY_AUTOMATIC);
 
-  gtk_main ();
+
+
+	gtk_container_add (GTK_CONTAINER (main_vbox), scrolled);
+
+	vbox = gtk_vbox_new (FALSE, 0);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled),vbox);
+
+	n++;
+	zveno = make_zveno(n);
+	gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
+
+
+
+
+
+	gtk_widget_show_all  (window);
+
+	gtk_main ();
     
-  return 0;
+return 0;
 }
