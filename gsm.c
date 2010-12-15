@@ -3,20 +3,15 @@
 #include <stdlib.h>
 
 
-        static gboolean delete_event( GtkWidget *widget,
-                              GdkEvent  *event,
+static gboolean delete_event( GtkWidget *widget,
+			      GdkEvent  *event,
                               gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;
 }
 
-
-
-
 static GtkWidget *make_zveno(int n)
-
-
 {
 	GtkWidget *vbox2;
 	GtkWidget *vbox4;
@@ -116,47 +111,47 @@ int main( int   argc,
 {
  
 
-	GtkWidget *main_vbox;
-	GtkWidget *window;
-	GtkWidget *vbox;
-	GtkWidget *zveno;
-	GtkWidget *frame;
+  GtkWidget *main_vbox;
+  GtkWidget *window;
+  GtkWidget *vbox;
+  GtkWidget *zveno;
+  GtkWidget *frame;
 
-	int n = 1;
+  int n = 0;
 
-	gtk_init (&argc, &argv);
+  gtk_init (&argc, &argv);
 
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (window), "GUI_RLN");
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "GUI_RLN");
 
-	g_signal_connect (window, "delete-event",
-		      G_CALLBACK (delete_event), NULL);
-
-
-
-	main_vbox = gtk_vbox_new (FALSE, 5);
-	gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 10);
-	gtk_container_add (GTK_CONTAINER (window), main_vbox);
-
-	vbox = gtk_vbox_new (FALSE, 0);
-
-	gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE,0);
-
-
-	n++;
-	zveno = make_zveno(n);
- 	gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
-
-	n++;
-	zveno = make_zveno(n);
- 	gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
+  g_signal_connect (window, "delete-event",
+		    G_CALLBACK (delete_event), NULL);
 
 
 
+  main_vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 10);
+  gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
-	gtk_widget_show_all  (window);
+  vbox = gtk_vbox_new (FALSE, 0);
 
-	gtk_main ();
+  gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE,0);
+
+
+  n++;
+  zveno = make_zveno(n);
+  gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
+
+  n++;
+  zveno = make_zveno(n);
+  gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
+
+
+
+
+  gtk_widget_show_all  (window);
+
+  gtk_main ();
     
-    return 0;
+  return 0;
 }
