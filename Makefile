@@ -1,7 +1,7 @@
 CC = gcc
 
-CFLAGS  = `pkg-config --cflags gtk+-3.0`
-LDFLAGS = `pkg-config --libs   gtk+-3.0`
+CFLAGS  = `pkg-config --cflags gtk+-2.0`
+LDFLAGS = `pkg-config --libs   gtk+-2.0`
 #CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE"
 CFLAGS+=-g
 OBJECTS = gsm.o
