@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+GtkWidget *vbox;
+int n;
 
 static gboolean delete_event( GtkWidget *widget,
 			      GdkEvent  *event,
@@ -11,7 +13,26 @@ static gboolean delete_event( GtkWidget *widget,
     return FALSE;
 }
 
-static GtkWidget *make_zveno(int n)
+
+static GtkWidget *make_zveno(int n2);
+
+static void callback( GtkWidget *widget,
+                      gpointer   data )
+{
+
+	GtkWidget *zveno_add;
+	GtkWidget *zv;
+	printf ("SIGNAL\n");
+
+//	gtk_widget_hide( zveno_add  );
+	zv = make_zveno(n);
+	gtk_box_pack_start (GTK_BOX (vbox), zv, FALSE, FALSE,0);
+	gtk_widget_show_all( vbox );
+}
+
+
+
+static GtkWidget *make_zveno(int n2)
 {
 	GtkWidget *vbox2;
 	GtkWidget *vbox4;
@@ -27,7 +48,7 @@ static GtkWidget *make_zveno(int n)
 
 	gchar str[255];
 
-	sprintf(str, "Звено %d", n);
+	sprintf(str, "Звено %d", n2);
 
 	aspectframe = gtk_aspect_frame_new (str, 0 , 0, 0, TRUE);
 
@@ -65,6 +86,10 @@ static GtkWidget *make_zveno(int n)
         gtk_box_pack_start (GTK_BOX (vbox2), combo, TRUE, FALSE, 0);
 
 	zveno_add = gtk_button_new_with_label("Добавить звено");
+
+	g_signal_connect (GTK_OBJECT(zveno_add), "clicked",
+			      G_CALLBACK (callback), NULL);
+
         gtk_box_pack_start (GTK_BOX (vbox2), zveno_add, TRUE, FALSE, 0);
 
 
@@ -101,9 +126,13 @@ static GtkWidget *make_zveno(int n)
 			        0, GTK_ENTRY (entry)->text_length);
 
 	gtk_box_pack_end (GTK_BOX (hbox2), entry, TRUE, TRUE, 0);
+	n++;
 
 	return aspectframe;
 }
+
+
+
 
 
 int main( int   argc,
@@ -113,12 +142,10 @@ int main( int   argc,
 
   GtkWidget *main_vbox;
   GtkWidget *window;
-  GtkWidget *vbox;
   GtkWidget *zveno;
   GtkWidget *frame;
 
-  int n = 0;
-
+	n   = 0;
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -142,9 +169,6 @@ int main( int   argc,
   zveno = make_zveno(n);
   gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
 
-  n++;
-  zveno = make_zveno(n);
-  gtk_box_pack_start (GTK_BOX (vbox), zveno, FALSE, FALSE,0);
 
 
 
